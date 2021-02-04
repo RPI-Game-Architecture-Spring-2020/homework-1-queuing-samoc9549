@@ -1,4 +1,8 @@
 #pragma once
+#include <mutex>
+#include <thread>
+
+typedef std::mutex lock;
 
 /*
 ** RPI Game Architecture Engine
@@ -16,6 +20,25 @@
 class ga_queue
 {
 public:
+
+	//Structs for a pointer, node in the queue, and the queue itself
+	struct queue_node;
+	struct queue_q;
+
+	struct queue_node {
+		void* value;
+		queue_node* next_node;
+	};
+
+	struct queue_q  {
+		queue_node* head;
+		queue_node* tail;
+		lock h_lock;
+		lock t_lock;
+	};
+
+	queue_q* queue;
+
 	ga_queue(int node_count);
 	~ga_queue();
 
